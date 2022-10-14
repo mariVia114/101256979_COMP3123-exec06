@@ -1,8 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const noteRoutes = require("./routes/NoteRoutes.js")
 
-const DB_URL = "mongodb+srv://sa:s3cr3t@cluster0.qa3t4.mongodb.net/gbc-fall2020?retryWrites=true&w=majority"
+const SERVER_PORT = 8081
+
+
+const DB_CONNECTION_STRING = "mongodb+srv://marie:vianca0410@cluster0.cmkzudn.mongodb.net/labSix_comp3123?retryWrites=true&w=majority"
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -10,7 +14,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise;
 
 // TODO - Update your mongoDB Atals Url here to Connect to the database
-mongoose.connect(DB_URL, {
+mongoose.connect(DB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -19,13 +23,10 @@ mongoose.connect(DB_URL, {
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
-
-
+app.use(noteRoutes);
 app.get('/', (req, res) => {
     res.send("<h1>Welcome to Note taking application - Week06 Exercise</h1>");
 });
-
-
-app.listen(8081, () => {
-    console.log("Server is listening on port 3000");
-});
+app.listen(SERVER_PORT, () =>{
+    console.log(`Server running at http://localhost:${SERVER_PORT}/`)
+})
